@@ -10,11 +10,13 @@ public class FindWordService {
 
         if (checkWord(enteredWord)) {
 
-            outputByCharacters(enteredWord);
+            System.out.println(outputByCharacters(enteredWord));
         }
     }
 
-    private void outputByCharacters(String enteredWord) {
+    String outputByCharacters(String enteredWord) {
+
+        StringBuilder result = new StringBuilder();
 
         char[] hidden = HIDDEN_WORD.toCharArray();
         char[] entered = enteredWord.toCharArray();
@@ -25,24 +27,25 @@ public class FindWordService {
 
                 if (hidden[i] == entered[i]) {
 
-                    System.out.print("\u001B[32m" + entered[i] + "\u001B[0m");
+                    result.append("\u001B[32m").append(entered[i]).append("\u001B[0m");
                     hidden[i] = '*';
 
                 } else if (new String(hidden).contains(String.valueOf(entered[i]))) {
                     int j = new String(hidden).indexOf(entered[i]);
                     if (hidden[j] == entered[j]) {
-                        System.out.print("\u001B[90m" + entered[i] + "\u001B[0m");
+                        result.append("\u001B[90m").append(entered[i]).append("\u001B[0m");
                         continue;
                     }
 
-                    System.out.print("\u001B[33m" + entered[i] + "\u001B[0m");
+                    result.append("\u001B[33m").append(entered[i]).append("\u001B[0m");
                     hidden[j] = '*';
 
                 } else {
-                    System.out.print("\u001B[90m" + entered[i] + "\u001B[0m");
+                    result.append("\u001B[90m").append(entered[i]).append("\u001B[0m");
                 }
             }
         }
+        return result.toString();
     }
 
     private boolean checkWord(String word) {
