@@ -1,51 +1,50 @@
 package by.solbeg.service;
 
+import by.solbeg.enam.Color;
 import by.solbeg.exception.ValidateException;
+import by.solbeg.response.Response;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class FindWordService {
 
     public static final String HIDDEN_WORD = "город";
 
-    public void find(String enteredWord) {
-
+    public List<Response> find(String enteredWord) {
         if (checkWord(enteredWord)) {
-
-            System.out.println(outputByCharacters(enteredWord));
+            return outputByCharacters(enteredWord);
         }
+        return Collections.emptyList();
     }
 
-    String outputByCharacters(String enteredWord) {
+    List<Response> outputByCharacters(String enteredWord) {
 
-        StringBuilder result = new StringBuilder();
+        List<Response> result = new ArrayList<>();
 
         char[] hidden = HIDDEN_WORD.toCharArray();
         char[] entered = enteredWord.toCharArray();
 
         for (int i = 0; i < hidden.length; i++) {
-
             if (i < entered.length) {
-
                 if (hidden[i] == entered[i]) {
-
-                    result.append("\u001B[32m").append(entered[i]).append("\u001B[0m");
+                    result.add(new Response(i, Color.GREEN));
                     hidden[i] = '*';
-
                 } else if (new String(hidden).contains(String.valueOf(entered[i]))) {
                     int j = new String(hidden).indexOf(entered[i]);
                     if (hidden[j] == entered[j]) {
-                        result.append("\u001B[90m").append(entered[i]).append("\u001B[0m");
+                        result.add(new Response(i, Color.GRAY));
                         continue;
                     }
-
-                    result.append("\u001B[33m").append(entered[i]).append("\u001B[0m");
+                    result.add(new Response(i, Color.YELLOW));
                     hidden[j] = '*';
-
                 } else {
-                    result.append("\u001B[90m").append(entered[i]).append("\u001B[0m");
+                    result.add(new Response(i, Color.GRAY));
                 }
             }
         }
-        return result.toString();
+        return result;
     }
 
     private boolean checkWord(String word) {

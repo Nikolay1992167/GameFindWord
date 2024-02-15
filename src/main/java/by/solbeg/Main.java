@@ -7,6 +7,6 @@ public class Main {
     public static void main(String[] args) {
 
         FindWordService service = new FindWordService();
-        service.find("порог");
+        System.out.println(service.find("порог"));
     }
 }
