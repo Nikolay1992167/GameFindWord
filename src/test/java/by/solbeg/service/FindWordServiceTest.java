@@ -1,12 +1,16 @@
 package by.solbeg.service;
 
+import by.solbeg.enam.Color;
 import by.solbeg.exception.ValidateException;
+import by.solbeg.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,13 +28,15 @@ class FindWordServiceTest {
 
     @ParameterizedTest
     @MethodSource("getArgumentsForTest")
-    public void shouldReturnExpectedValue(String entered, String expected) {
+    public void shouldReturnExpectedValue(String entered, List<Response> expected) {
         // given, when
-        String actual = findWordService.outputByCharacters(entered);
+        List<Response> actual = findWordService.outputByCharacters(entered);
 
         // then
-        assertThat(actual).isEqualTo(expected);
-
+        for (int i = 0; i < actual.size(); i++) {
+            assertThat(actual.get(i).getPosition()).isEqualTo(expected.get(i).getPosition());
+            assertThat(actual.get(i).getColor()).isEqualTo(expected.get(i).getColor());
+        }
     }
 
     @Test
@@ -75,21 +81,21 @@ class FindWordServiceTest {
     static Stream<Arguments> getArgumentsForTest() {
 
         return Stream.of(
-                Arguments.of("город", "\u001B[32mг\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[32mр\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[32mд\u001B[0m"),
-                Arguments.of("ооооо", "\u001B[90mо\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[90mо\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[90mо\u001B[0m"),
-                Arguments.of("порог", "\u001B[90mп\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[32mр\u001B[0m" +
-                                      "\u001B[32mо\u001B[0m" +
-                                      "\u001B[33mг\u001B[0m")
+                Arguments.of("город", Arrays.asList(new Response(0, Color.GREEN),
+                        new Response(1, Color.GREEN),
+                        new Response(2, Color.GREEN),
+                        new Response(3, Color.GREEN),
+                        new Response(4, Color.GREEN))),
+                Arguments.of("ооооо", Arrays.asList(new Response(0, Color.GRAY),
+                        new Response(1, Color.GREEN),
+                        new Response(2, Color.GRAY),
+                        new Response(3, Color.GREEN),
+                        new Response(4, Color.GRAY))),
+                Arguments.of("порог", Arrays.asList(new Response(0, Color.GRAY),
+                        new Response(1, Color.GREEN),
+                        new Response(2, Color.GREEN),
+                        new Response(3, Color.GREEN),
+                        new Response(4, Color.YELLOW)))
         );
     }
 }
