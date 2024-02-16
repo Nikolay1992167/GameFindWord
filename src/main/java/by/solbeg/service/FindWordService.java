@@ -10,7 +10,11 @@ import java.util.List;
 
 public class FindWordService {
 
-    public static final String HIDDEN_WORD = "город";
+    private String hiddenWord;
+
+    public void setHiddenWord(String hiddenWord) {
+        this.hiddenWord = hiddenWord;
+    }
 
     public List<Response> find(String enteredWord) {
         if (checkWord(enteredWord)) {
@@ -23,7 +27,7 @@ public class FindWordService {
 
         List<Response> result = new ArrayList<>();
 
-        char[] hidden = HIDDEN_WORD.toCharArray();
+        char[] hidden = hiddenWord.toCharArray();
         char[] entered = enteredWord.toCharArray();
 
         for (int i = 0; i < hidden.length; i++) {
@@ -50,17 +54,14 @@ public class FindWordService {
     private boolean checkWord(String word) {
 
         if (word == null || word.trim().isEmpty()) {
-            throw new ValidateException("Значение не может быть null или пустым!");
+            throw new ValidateException("The value cannot be null or empty!");
         }
-
         if (word.length() != 5) {
-            throw new ValidateException("Длина слова должна равняться 5!");
+            throw new ValidateException("The word length should be 5!");
         }
-
         for (char c : word.toCharArray()) {
-
             if (!Character.isLetter(c)) {
-                throw new ValidateException("Слово должно состоять из букв!");
+                throw new ValidateException("The word must consist of letters!");
             }
         }
         return true;
