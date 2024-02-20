@@ -109,7 +109,12 @@ class FindWordServiceTest {
                         new Response(1, Color.YELLOW),
                         new Response(2, Color.YELLOW),
                         new Response(3, Color.YELLOW),
-                        new Response(4, Color.GRAY))))
+                        new Response(4, Color.GRAY)))),
+                Arguments.of("baaba", Map.of("aabab", Arrays.asList(new Response(0, Color.YELLOW),
+                        new Response(1, Color.GREEN),
+                        new Response(2, Color.YELLOW),
+                        new Response(3, Color.YELLOW),
+                        new Response(4, Color.YELLOW))))
                 );
     }
 }

@@ -30,6 +30,7 @@ public class FindWordService {
         char[] hidden = hiddenWord.toCharArray();
         char[] entered = enteredWord.toCharArray();
 
+        outer:
         for (int i = 0; i < hidden.length; i++) {
             if (i < entered.length) {
                 if (hidden[i] == entered[i]) {
@@ -38,6 +39,13 @@ public class FindWordService {
                 } else if (new String(hidden).contains(String.valueOf(entered[i]))) {
                     int j = new String(hidden).indexOf(entered[i]);
                     if (hidden[j] == entered[j]) {
+                        for (int k = j + 1; k < hidden.length; k++) {
+                            if (hidden[k] == entered[i]) {
+                                result.add(new Response(i, Color.YELLOW));
+                                hidden[k] = '*';
+                                continue outer;
+                            }
+                        }
                         result.add(new Response(i, Color.GRAY));
                         continue;
                     }
